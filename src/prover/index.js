@@ -4,11 +4,11 @@ const { SHA256 } = require("crypto-js");
 
 class Prover {
   generateX() {
-    this.x = crypto.randomBytes(1).toString("hex");
+    this.x = crypto.randomBytes(64).toString("hex");
   }
 
   generateV() {
-    this.v = crypto.randomBytes(1).toString("hex");
+    this.v = crypto.randomBytes(32).toString("hex");
   }
 
   /**
