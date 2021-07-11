@@ -6,17 +6,25 @@ const generator = new Generator();
 const prover = new Prover();
 const verifier = new Verifier();
 
-generator.computeG();
-console.log("G: ", generator.g.toJSNumber());
+const M = Date.now().toString(16);
+console.log("M: ", M);
 
-const keys = generator.computeKeys();
-console.log("KEYS: ", keys);
+const g = generator.computeG();
+console.log("G: ", g.toJSNumber());
 
 prover.generateX();
+prover.generateR();
+
 console.log("X: ", prover.x);
+console.log("R: ", prover.r);
 
-const proof = prover.computeProof(keys[0], generator.g);
-console.log("PROOF: ", proof);
+const y = prover.computeY(g);
+const t = prover.computeT(g);
+const c = prover.computeC(t, M);
+const u = prover.computeU(c);
 
-const validity = verifier.isValid(keys[1], proof[0], proof[1]);
-console.log("ISVALID: ", validity);
+console.log("[Y, T, C, U]: ", [y, t, c, u]);
+
+const isValid = verifier.isValid(g, t, M, u, y, prover.modulo);
+
+console.log("ISVALID: ", isValid);
