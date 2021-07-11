@@ -16,16 +16,11 @@ console.log("X: ", prover.x);
 console.log("V: ", prover.v);
 
 const y = prover.computeY(g);
+const r = prover.computeR(g);
+const u = prover.computeU(r);
+const isValid = verifier.isValid(g, y, r, u, prover.modulo);
+
 console.log("Y: ", y);
-
-const t = prover.computeT(g);
-console.log("T: ", t);
-
-const c = prover.computeC(g, y, t);
-console.log("C: ", c);
-
-const r = prover.computeR(c);
 console.log("R: ", r);
-
-const validity = verifier.isValid(g, t, r, y, c);
-console.log("Validity: ", validity);
+console.log("U: ", u);
+console.log("IsValid: ", isValid);

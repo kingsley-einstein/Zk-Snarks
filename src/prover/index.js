@@ -3,12 +3,28 @@ const crypto = require("crypto");
 const { SHA256 } = require("crypto-js");
 
 class Prover {
+  constructor() {
+    this.modulo = BIGINT("294318880544991639594266924362588035491");
+  }
+
   generateX() {
-    this.x = crypto.randomBytes(64).toString("hex");
+    const randomBytes = crypto.randomBytes(1).toString("hex");
+    const randomNum = BIGINT(randomBytes, 16).toJSNumber();
+    this.x = BIGINT.randBetween(
+      BIGINT(2),
+      this.modulo.subtract(BIGINT[1]),
+      () => randomNum
+    ).toString(16);
   }
 
   generateV() {
-    this.v = crypto.randomBytes(32).toString("hex");
+    const randomBytes = crypto.randomBytes(1).toString("hex");
+    const randomNum = BIGINT(randomBytes, 16).toJSNumber();
+    this.v = BIGINT.randBetween(
+      BIGINT(1),
+      this.modulo.subtract(BIGINT[1]),
+      () => randomNum
+    ).toString(16);
   }
 
   /**
@@ -17,36 +33,31 @@ class Prover {
    */
   computeY(g) {
     const X = BIGINT(this.x, 16);
-    return g.pow(X).toString(16);
+    return g.modPow(X, this.modulo).toString(16);
   }
 
   /**
    *
    * @param {BIGINT.BigInteger} g
    */
-  computeT(g) {
-    return g.pow(BIGINT(this.v, 16)).toString(16);
+  computeR(g) {
+    const V = BIGINT(this.v, 16);
+    return g.modPow(V, this.modulo).toString(16);
   }
 
   /**
    *
-   * @param {BIGINT.BigInteger} g
-   * @param {string} y
-   * @param {string} t
+   * @param {string} r
    */
-  computeC(g, y, t) {
-    return SHA256(g.toString(16) + y + t).toString();
-  }
-
-  /**
-   *
-   * @param {string} c
-   */
-  computeR(c) {
-    const C = BIGINT(c, 16);
-    return BIGINT(this.v, 16)
-      .minus(C.multiply(BIGINT(this.x, 16)))
-      .toString(16);
+  computeU(r) {
+    const R = BIGINT(r, 16);
+    const X = BIGINT(this.x, 16);
+    const hash = SHA256(r).toString();
+    const hashAsBigInt = BIGINT(hash, 16);
+    const c = hashAsBigInt.modPow(BIGINT[1], this.modulo.subtract(BIGINT[1]));
+    const u1 = R.add(c.multiply(X));
+    const u2 = u1.modPow(BIGINT[1], this.modulo.subtract(BIGINT[1]));
+    return u2.toString(16);
   }
 }
 

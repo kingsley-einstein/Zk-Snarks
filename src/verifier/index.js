@@ -1,19 +1,27 @@
 const BIGINT = require("big-integer");
+const { SHA256 } = require("crypto-js");
 
 class Verifier {
   /**
    * @param {BIGINT.BigInteger} g
-   * @param {string} t
-   * @param {string} r
    * @param {string} y
-   * @param {string} c
+   * @param {string} r
+   * @param {string} u
+   * @param {BIGINT.BigInteger} modulo
    */
-  isValid(g, t, r, y, c) {
-    const R = BIGINT(r, 16);
+  isValid(g, y, r, u, modulo) {
     const Y = BIGINT(y, 16);
-    const C = BIGINT(c, 16);
-    const T = BIGINT(t, 16);
-    return T.equals(g.pow(R).multiply(Y.pow(C)));
+    const R = BIGINT(r, 16);
+    const U = BIGINT(u, 16);
+    const hash = SHA256(r).toString();
+    const hashBigInt = BIGINT(hash, 16);
+    const c = hashBigInt.modPow(BIGINT[1], modulo.subtract(BIGINT[1]));
+    const LHS = g.modPow(U, modulo);
+    const RHS1 = R.modPow(BIGINT[1], modulo);
+    const RHS2 = Y.modPow(c, modulo);
+    const mulRHS = RHS1.multiply(RHS2);
+    const RHS = mulRHS.modPow(BIGINT[1], modulo);
+    return LHS.equals(RHS);
   }
 }
 
