@@ -8,75 +8,29 @@ class Prover {
   }
 
   generateX() {
-    let rand = crypto.randomBytes(64).toString("hex");
-    let randnum = BIGINT(rand, 16);
-
-    while (!BIGINT[2].lt(randnum) && !randnum.lt(this.modulo)) {
-      rand = crypto.randomBytes(1).toString("hex");
-      randnum = BIGINT(rand, 16);
-    }
-
-    this.x = randnum.toString(16);
+    const randomBytes = crypto.randomBytes(16).toString("hex");
+    const randomNum = BIGINT(randomBytes, 16).toJSNumber();
+    this.x = BIGINT.randBetween(
+      BIGINT[2],
+      this.modulo,
+      () => randomNum
+    ).toString(16);
   }
 
-  generateR() {
-    let rand = crypto.randomBytes(64).toString("hex");
-    let randnum = BIGINT(rand, 16);
-
-    while (
-      !BIGINT[1].lt(randnum) &&
-      !randnum.lt(this.modulo.subtract(BIGINT[1]))
-    ) {
-      rand = crypto.randomBytes(1).toString("hex");
-      randnum = BIGINT(rand, 16);
-    }
-
-    this.r = randnum.toString(16);
+  computeC() {
+    return SHA256(this.x).toString();
   }
 
   /**
-   *
    * @param {BIGINT.BigInteger} g
+   * @param {string} pk
    */
-  computeY(g) {
-    const X = BIGINT(this.x, 16);
-    const y = g.modPow(X, this.modulo);
-    return y.toString(16);
-  }
-
-  /**
-   *
-   * @param {BIGINT.BigInteger} g
-   */
-  computeT(g) {
-    const R = BIGINT(this.r, 16);
-    const t = g.modPow(R, this.modulo);
-    return t.toString(16);
-  }
-
-  /**
-   *
-   * @param {string} t
-   * @param {string} message
-   */
-  computeC(t, message) {
-    const T = BIGINT(t, 16);
-    const concatenatedHash = SHA256(T.toString(16))
-      .toString()
-      .concat(SHA256(message).toString());
-    const hashAsInteger = BIGINT(concatenatedHash, 16);
-    return hashAsInteger.mod(this.modulo.subtract(1)).toString(16);
-  }
-
-  /**
-   *
-   * @param {string} c
-   */
-  computeU(c) {
-    const R = BIGINT(this.r, 16);
-    const C = BIGINT(c, 16);
-    const X = BIGINT(this.x, 16);
-    return R.add(C.multiply(X)).toString(16);
+  prove(g, pk) {
+    const hashX = SHA256(this.x).toString();
+    const proving_key = BIGINT(pk, 16);
+    const X = BIGINT(hashX, 16);
+    const r = g.modPow(X.subtract(BIGINT[1]), this.modulo);
+    return proving_key.multiply(r).toString(16);
   }
 }
 
