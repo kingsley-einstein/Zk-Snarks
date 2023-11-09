@@ -1,0 +1,89 @@
+repo_name: kingsley-einstein/Zk-Snarks
+report_id: 9924e174825c67f861d82a0306d3c874
+repo_type: Public
+timestamp: '2023-11-09T20:07:58+00:00'
+requested_by: kingsley-einstein
+provider: github
+branch: master
+detected_tools_count: 6
+tools:
+- name: JavaScript
+  description: Lightweight, interpreted, object-oriented language with first-class
+    functions
+  website_url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1209/javascript.jpeg
+  detection_source: Repo Metadata
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source: Repo Metadata
+- name: npm
+  description: The package manager for JavaScript.
+  website_url: https://www.npmjs.com/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Front End Package Manager
+  image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2021-07-05 08:16:54.000000000 Z
+- name: big-integer
+  description: An arbitrary length integer library for Javascript
+  package_url: https://www.npmjs.com/big-integer
+  version: 1.6.48
+  license: Unlicense
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/17823/default_a53af9d6b5a4c8c6e8d5f8494d76a8d2efd3e660.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2021-07-05 08:16:54.000000000 Z
+- name: bn.js
+  description: Big number implementation in pure javascript
+  package_url: https://www.npmjs.com/bn.js
+  version: 5.2.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16585/default_f7592cb347fae67ce7c7f221ddd5fd2cb0afc28f.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2021-07-05 08:16:54.000000000 Z
+- name: crypto-js
+  description: JavaScript library of crypto standards
+  package_url: https://www.npmjs.com/crypto-js
+  version: 4.0.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16283/default_9924e5da1d50ea01e52b48e4fae4b1347af5e4ff.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2021-07-05 08:16:54.000000000 Z
+  vulnerabilities:
+  - name: crypto-js PBKDF2 1,000 times weaker than specified in 1993 and 1.3M times
+      weaker than current standard
+    cve_id: CVE-2023-46233
+    cve_url: https://github.com/advisories/GHSA-xwcq-pm8m-c4vf
+    detected_date: Oct 26
+    severity: critical
+    first_patched: 4.2.0
